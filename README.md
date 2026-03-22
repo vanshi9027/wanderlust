@@ -103,7 +103,7 @@ node app.js
 ### 6️⃣ Open in browser
 
 ```
-http://localhost:3000
+http://localhost:8080
 ```
 
 ---
