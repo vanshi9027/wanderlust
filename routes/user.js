@@ -15,8 +15,14 @@ const passport = require("passport");
     const newUser = new User({email, username}); // create new contractuer 
      const registeredUser =  await User.register(newUser , password);
      console.log(registeredUser);
-     req.flash( "success" , "Welcome to Wanderlust");
+     req.login(registeredUser , (err) =>{
+      if(err) {
+         return next(err);
+      }
+        req.flash( "success" , "Welcome to Wanderlust");
       res.redirect("/listings"); 
+     })
+    
     }
     catch(e){
         req.flash("error" , e.message);
