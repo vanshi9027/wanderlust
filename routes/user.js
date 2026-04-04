@@ -41,6 +41,7 @@ const { saveRedirectUrl } = require("../middleware.js");
     req.flash("success" , " Welcome back to Wanderlust");
     let redirectUrl = res.locals.redirectUrl || "/listings"
       res.redirect(redirectUrl);
+      // console.log("After login:", req.user);
 
  });
 
