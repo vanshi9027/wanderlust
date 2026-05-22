@@ -9,12 +9,24 @@
         <div class="card col-6 offset-3 show-card listing-card">
             <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listingimage" />
             <div class="card-body">
+                <p class="card-text"> Owned by: 
+                    <i>
+                        <%= listing.owner.username %>
+                    </i>
+                </p>
+                <Br></Br>
                 <p class="card-text">
-             
                     <%= listing.description %> <br>
-                        <%= listing.price.toLocaleString("en-IN")%> <br>
-                            <%= listing.location %> <br>
-                                <%= listing.country %> <br>
+                </p>
+                <p class="card-text">
+                    <%= listing.price.toLocaleString("en-IN")%> <br>
+                </p>
+                <p class="card-text">
+                    <%= listing.location %> <br>
+                </p>
+                <p class="card-text">
+                    <%= listing.country %> <br>
+                </p>
 
 
                 </p>
@@ -66,23 +78,27 @@
             <P> <b> All Reviews</b></P>
             <div class="row">
 
-            <% for(review of listing.reviews){ %>
-                <div class="card col-5 ms-3 mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title"> Jane Doe</h5>
-                        <P class="card-text">
-                            <%= review.comment %></P>
+                <% for(review of listing.reviews){ %>
+                    <div class="card col-5 ms-3 mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title"> Jane Doe</h5>
+                            <P class="card-text">
+                                <%= review.comment %>
+                            </P>
 
-                        <P class="card-text"><%= review.rating %> stars</P>
+                            <P class="card-text">
+                                <%= review.rating %> stars
+                            </P>
+                        </div>
+
+                        <form class="mb-3" method="POST"
+                            action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                            <button class="btn btn-sm btn-dark "> Delete</button>
+                        </form>
                     </div>
 
-                    <form class="mb-3" method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
-                        <button class="btn btn-sm btn-dark "> Delete</button>
-                    </form>
-                </div>
-
-                <% } %>
-                 </div>
+                    <% } %>
+            </div>
 
 
         </div>
