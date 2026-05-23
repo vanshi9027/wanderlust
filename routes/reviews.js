@@ -1,25 +1,12 @@
 const express = require("express");
-const router = express.Router({mergeParms : true});
+const router = express.Router({mergeParams : true});
 const wrapAsync = require("../utils/wrapAsync.js");
 const ExpressError = require("../utils/ExpressError.js");
-
 const  Reviews = require("../Model/reviews.js"); 
-const {reviewSchema} = require("../schema.js");
+
 const Listing = require("../Model/listing.js");
 
-
-
-
-const  validateReview  = (req, res ,next) =>{
-    let {error} = reviewSchema.validate(req.body);
-    if(error){
-        let errMsg = error.details.map((el) =>el.message).join(",");
-    throw new ExpressError(400, errMsg);
-    }
-    else{
-        next();
-    }
-}
+const {validateReview} = require("../middleware.js");
 
 // Reviews
 
@@ -27,7 +14,11 @@ const  validateReview  = (req, res ,next) =>{
 
 router.post("/" , validateReview, wrapAsync( async (req ,res) =>{
     console.log("Params:", req.params);
-   let listing = await Listing.findById(req.params.id)    
+   let listing = await Listing.findById(req.params.id)  
+   if (!listing) {
+   req.flash("error", "Listing does not exist");
+   return res.redirect("/listings");
+}  
    let newReview = new Reviews(req.body.review);
    listing.reviews.push(newReview);
    await newReview.save();
