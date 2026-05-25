@@ -14,7 +14,10 @@ const upload = multer({storage});
 router
     .route("/")
     .get(wrapAsync(listingControllers.index))
-     .post(isLoggedIn , validateListing , upload.single('listing[image]') , wrapAsync(listingControllers.createListing));
+     .post(isLoggedIn ,
+         validateListing , 
+         upload.single('listing[image]') 
+         , wrapAsync(listingControllers.createListing));
      
  
    
@@ -30,7 +33,7 @@ router.get("/new", isLoggedIn, listingControllers.renderNewform);
 router
     .route("/:id")
     .get( listingControllers.showListing)
-    .put(isLoggedIn, isOwner, validateListing,
+    .put(isLoggedIn, isOwner, upload.single('listing[image]') , validateListing,  
         wrapAsync(listingControllers.updateListing))
     .delete(isLoggedIn, isOwner, wrapAsync(listingControllers.deleteListing));
 

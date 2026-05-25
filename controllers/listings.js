@@ -27,14 +27,16 @@ module.exports.showListing = async (req, res) => {
 
 module.exports.createListing = async (req, res, next) => {
 
-
-    const newListing = new Listing(req.body.listing);
+      let url = req.file.path;
+      let filename = req.file.filename;
+      console.log(url , " " , filename);
+     const newListing = new Listing(req.body.listing);
 
     console.log("User at create:", req.user); // should show user
    
-    newListing.owner = req.user._id;
-
-    console.log("After setting owner:", newListing);
+     newListing.owner = req.user._id;
+         newListing.image = {url, filename};
+     console.log("After setting owner:", newListing);
     await newListing.save();
     req.flash("success", "New Listing Created!");
 
@@ -52,13 +54,24 @@ module.exports.editListing = async (req, res) => {
         req.flash("error", " listing you requested for does not exist");
          return res.redirect("/listings");
     }
-    res.render("listings/edit.ejs", { listing });
+
+    let originalImageUrl = listing.image.url;
+
+    originalImageUrl = originalImageUrl.replace("/upload" , "/upload/w_250");
+    console.log(originalImageUrl); 
+    res.render("listings/edit.ejs", { listing , originalImageUrl });
 };
 
 
 module.exports.updateListing = async (req, res) => {
     let { id } = req.params;
-    await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+   let listing =   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
+   if(req.file){
+   let url = req.file.path;
+      let filename = req.file.filename;
+       listing.image = {url , filename};  // save link in mongodb 
+       await listing.save();
+   }
     req.flash("success", "Listing Updated!");
     res.redirect(`/listings/${id}`);
 };
