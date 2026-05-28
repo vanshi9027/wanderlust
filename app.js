@@ -27,17 +27,20 @@ const userRouter = require("./routes/user.js");
 
 
 
-const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
+// const MONGO_URL = 'mongodb://127.0.0.1:27017/wanderlust';
+
+const dbUrl = process.env.ATLASDB_URL;
+
 main()
     .then(() => {
         console.log("connected to DB")
     })
     .catch((err) => {
-        consol.log(err);
+        console.log(err);
     });
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dbUrl);
 }
 
 
